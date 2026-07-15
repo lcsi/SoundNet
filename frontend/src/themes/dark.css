@@ -1,0 +1,15 @@
+/* ===== Dark Red Theme (default) ===== */
+.theme-dark {
+  --bg-primary: #1a1a2e;
+  --bg-secondary: #16213e;
+  --bg-card: #0f3460;
+  --text-primary: #e8e8e8;
+  --text-secondary: #a0a0b0;
+  --accent: #e94560;
+  --accent-hover: #ff6b81;
+  --success: #4ade80;
+  --warning: #fbbf24;
+  --border: #2a2a4a;
+  --radius: 12px;
+  --radius-sm: 8px;
+}

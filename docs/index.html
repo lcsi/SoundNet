@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title data-i18n="pageTitle">SoundNet — 频道音乐播放系统</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════
+     Navbar
+     ══════════════════════════════════════════════ -->
+<nav class="navbar" id="navbar">
+  <div class="container nav-container">
+    <a href="#" class="nav-logo">🎵 SoundNet</a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#features" data-i18n="navFeatures">功能特性</a></li>
+      <li><a href="#architecture" data-i18n="navArch">系统架构</a></li>
+      <li><a href="#screenshots" data-i18n="navScreenshots">截图演示</a></li>
+      <li><button class="lang-btn" id="langToggle">EN</button></li>
+    </ul>
+    <button class="nav-toggle" id="navToggle" aria-label="菜单">☰</button>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════════════════
+     Hero
+     ══════════════════════════════════════════════ -->
+<section class="hero" id="hero">
+  <div class="container">
+    <div class="hero-grid">
+      <div class="hero-content anim-fade">
+        <div class="hero-badge">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+          <span data-i18n="badge">v2.0 · 实时频道音乐系统</span>
+        </div>
+        <h1>
+          <span class="highlight">SoundNet</span><br/>
+          <span data-i18n="heroTitle2">控制与播放分离的</span><br/>
+          <span data-i18n="heroTitle3">分布式音乐系统</span>
+        </h1>
+        <p data-i18n="heroDesc">
+          基于 Go + Vue 3 + WebSocket 构建，控制页面与播放器完全解耦。
+          多频道实时调度，支持 Web / Android / Windows / Linux 全平台播放。
+        </p>
+        <div class="hero-actions">
+          <a href="#features" class="btn btn-primary">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            <span data-i18n="ctaFeatures">了解功能</span>
+          </a>
+          <a href="#architecture" class="btn btn-outline">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            <span data-i18n="ctaArch">架构一览</span>
+          </a>
+        </div>
+        <div style="display:flex; gap:8px; margin-top:20px; flex-wrap:wrap;">
+          <span class="tag">Go</span>
+          <span class="tag">Vue 3</span>
+          <span class="tag">WebSocket</span>
+          <span class="tag">Redis</span>
+          <span class="tag">SQLite</span>
+          <span class="tag">Docker</span>
+        </div>
+      </div>
+
+      <div class="hero-visual anim-fade anim-delay-2">
+        <div class="arch-diagram">
+          <div class="arc-row">
+            <div class="arc-node control">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+              <span data-i18n="archStep1">控制页面</span>
+            </div>
+            <span class="arc-connector">⟷</span>
+            <div class="arc-node server">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+              <span data-i18n="archStep2">Go 平台</span>
+            </div>
+            <span class="arc-connector">⟷</span>
+            <div class="arc-node player">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+              <span data-i18n="archStep3">播放器</span>
+            </div>
+          </div>
+          <hr class="divider" />
+          <div class="arc-row" style="justify-content:space-around;">
+            <div class="arc-node data" style="flex-direction:row; gap:6px; min-width:auto; padding:6px 14px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+              SQLite
+            </div>
+            <div class="arc-node data" style="flex-direction:row; gap:6px; min-width:auto; padding:6px 14px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              Redis
+            </div>
+            <div class="arc-node" style="background:#e8f5e9;color:#2e7d32;flex-direction:row;gap:6px;min-width:auto;padding:6px 14px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14"/></svg>
+              <span data-i18n="thirdParty">第三方 API</span>
+            </div>
+          </div>
+          <div style="margin-top:12px; text-align:center; font-size:0.75rem; color:var(--slate-400);">
+            <span data-i18n="wsLabel">⚡ 所有通信基于 WebSocket · 实时双向</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     Features
+     ══════════════════════════════════════════════ -->
+<section class="features" id="features">
+  <div class="container">
+    <h2 class="section-title" data-i18n="featuresTitle">核心功能</h2>
+    <p class="section-subtitle" data-i18n="featuresSub">从频道管理到闹钟定时，打造全能的分布式音乐控制体验。</p>
+
+    <div class="features-grid">
+      <div class="feature-card anim-fade anim-delay-1">
+        <div class="feature-icon green">📡</div>
+        <h3 data-i18n="f1Title">控制播放分离</h3>
+        <p data-i18n="f1Desc">控制页面与播放器完全解耦，通过 Go 后端 WebSocket 调度。一个控制页面可同时指挥多个播放器。</p>
+      </div>
+
+      <div class="feature-card anim-fade anim-delay-1">
+        <div class="feature-icon blue">📻</div>
+        <h3 data-i18n="f2Title">频道管理体系</h3>
+        <p data-i18n="f2Desc">频道是播放器逻辑集合。创建频道、分配播放器、独立队列。同一频道内的所有播放器同步接收指令。</p>
+      </div>
+
+      <div class="feature-card anim-fade anim-delay-2">
+        <div class="feature-icon amber">🎵</div>
+        <h3 data-i18n="f3Title">智能播放队列</h3>
+        <p data-i18n="f3Desc">Redis 持久化队列，支持添加、删除、拖拽排序、清空。实时推送队列变更到控制端和播放器。</p>
+      </div>
+
+      <div class="feature-card anim-fade anim-delay-2">
+        <div class="feature-icon purple">🔍</div>
+        <h3 data-i18n="f4Title">全网音乐搜索</h3>
+        <p data-i18n="f4Desc">接入第三方音乐服务 API，搜索歌曲、歌单，获取播放链接和歌词。预留接口适配层，可切换数据源。</p>
+      </div>
+
+      <div class="feature-card anim-fade anim-delay-3">
+        <div class="feature-icon rose">⏰</div>
+        <h3 data-i18n="f5Title">闹钟 &amp; 睡眠定时</h3>
+        <p data-i18n="f5Desc">频道级闹钟系统：渐入渐出、冲突策略、指定歌曲播放。睡眠定时自动暂停/停止，闭环体验。</p>
+      </div>
+
+      <div class="feature-card anim-fade anim-delay-3">
+        <div class="feature-icon teal">🎛️</div>
+        <h3 data-i18n="f6Title">精细播放控制</h3>
+        <p data-i18n="f6Desc">播放/暂停、上一曲/下一曲、进度拖拽、音量调节（统一或单独）。实时状态同步，所见即所得。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     Architecture
+     ══════════════════════════════════════════════ -->
+<section class="architecture" id="architecture">
+  <div class="container">
+    <h2 class="section-title" data-i18n="archTitle">系统架构</h2>
+    <p class="section-subtitle" data-i18n="archSub">全栈 Go + Vue 3 + Redis + SQLite，Docker Compose 一键拉起。</p>
+
+    <div class="arch-flow">
+      <div class="flow-step control">
+        <div class="step-icon">🖥️</div>
+        <div class="step-label" data-i18n="archStep1">Vue 控制页面</div>
+      </div>
+      <div class="flow-arrow">⟷ WS ⟷</div>
+      <div class="flow-step server">
+        <div class="step-icon">⚙️</div>
+        <div class="step-label" data-i18n="archStep2">Go API 平台</div>
+      </div>
+      <div class="flow-arrow">⟷ WS ⟷</div>
+      <div class="flow-step player-ui">
+        <div class="step-icon">🔊</div>
+        <div class="step-label" data-i18n="archStep3">播放器客户端</div>
+      </div>
+    </div>
+
+    <div class="tech-stack">
+      <div class="tech-card anim-fade anim-delay-1">
+        <div class="tech-icon">🐹</div>
+        <h4 data-i18n="archTech1Title">Go</h4>
+        <p data-i18n="archTech1Desc">HTTP + WebSocket 服务<br/>业务核心 · 指令调度</p>
+        <span class="tag" style="margin-top:8px;">Gorilla WebSocket</span>
+      </div>
+      <div class="tech-card anim-fade anim-delay-2">
+        <div class="tech-icon">🟢</div>
+        <h4 data-i18n="archTech2Title">Vue 3</h4>
+        <p data-i18n="archTech2Desc">响应式控制页面<br/>TypeScript · Vite 构建</p>
+        <span class="tag tag-blue" style="margin-top:8px;">Lucide 图标</span>
+      </div>
+      <div class="tech-card anim-fade anim-delay-3">
+        <div class="tech-icon">🗄️</div>
+        <h4 data-i18n="archTech3Title">Redis + SQLite</h4>
+        <p data-i18n="archTech3Desc">播放队列（Redis）<br/>播放器信息（SQLite）</p>
+        <span class="tag tag-purple" style="margin-top:8px;" data-i18n="lightweight">轻量持久化</span>
+      </div>
+      <div class="tech-card anim-fade anim-delay-4">
+        <div class="tech-icon">🐳</div>
+        <h4 data-i18n="archTech4Title">Docker Compose</h4>
+        <p data-i18n="archTech4Desc">api / redis / vue<br/>三服务一键部署</p>
+        <span class="tag tag-amber" style="margin-top:8px;" data-i18n="devAndProd">开发 &amp; 生产</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     Screenshots Gallery
+     ══════════════════════════════════════════════ -->
+<section class="screenshots" id="screenshots">
+  <div class="container">
+    <h2 class="section-title" data-i18n="screenshotsTitle">界面预览</h2>
+    <p class="section-subtitle" data-i18n="screenshotsSub">多端一致体验，从频道管理到播放控制一应俱全。</p>
+
+    <div class="screenshot-grid">
+      <figure class="screenshot-figure">
+        <a href="screenshots/main-dashboard.png" target="_blank" class="screenshot-link">
+          <img src="screenshots/main-dashboard.png" alt="主控制面板" loading="lazy" />
+        </a>
+        <figcaption data-i18n="screenshot1Cap">📋 频道列表与播放器总览</figcaption>
+      </figure>
+
+      <figure class="screenshot-figure">
+        <a href="screenshots/channel-control.png" target="_blank" class="screenshot-link">
+          <img src="screenshots/channel-control.png" alt="频道控制界面" loading="lazy" />
+        </a>
+        <figcaption data-i18n="screenshot2Cap">🎵 频道内播放队列与控制</figcaption>
+      </figure>
+
+      <figure class="screenshot-figure">
+        <a href="screenshots/search-results.png" target="_blank" class="screenshot-link">
+          <img src="screenshots/search-results.png" alt="音乐搜索" loading="lazy" />
+        </a>
+        <figcaption data-i18n="screenshot3Cap">🔍 全网音乐搜索（支持多源）</figcaption>
+      </figure>
+
+      <figure class="screenshot-figure">
+        <a href="screenshots/alarm-timer.png" target="_blank" class="screenshot-link">
+          <img src="screenshots/alarm-timer.png" alt="闹钟与睡眠定时" loading="lazy" />
+        </a>
+        <figcaption data-i18n="screenshot4Cap">⏰ 闹钟 &amp; 睡眠定时管理</figcaption>
+      </figure>
+
+      <figure class="screenshot-figure">
+        <a href="screenshots/device-selector.png" target="_blank" class="screenshot-link">
+          <img src="screenshots/device-selector.png" alt="多设备管理" loading="lazy" />
+        </a>
+        <figcaption data-i18n="screenshot5Cap">📱 多播放器跨设备切换</figcaption>
+      </figure>
+
+      <figure class="screenshot-figure">
+        <a href="screenshots/desktop-channel.png" target="_blank" class="screenshot-link">
+          <img src="screenshots/desktop-channel.png" alt="桌面端频道界面" loading="lazy" />
+        </a>
+        <figcaption data-i18n="screenshot6Cap">🖥️ 桌面端宽屏频道界面</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     Footer
+     ══════════════════════════════════════════════ -->
+<footer class="footer">
+  <div class="container">
+    <p style="font-size:1.1rem; font-weight:600; color:var(--white); margin-bottom:4px;">
+      🎵 <span data-i18n="footerBrand">SoundNet</span>
+    </p>
+    <p data-i18n="footerDesc">基于 Go + Vue 3 + WebSocket 的分布式频道音乐播放系统</p>
+    <p style="margin-top:12px; font-size:0.85rem;" data-i18n="footerTech">
+      技术栈：Go · Gorilla WebSocket · Vue 3 · TypeScript · Redis · SQLite · Docker · Vite
+    </p>
+    <p style="margin-top:16px; font-size:0.8rem;" data-i18n="footerCopyright">
+      © 2026 SoundNet Project · 控制与播放分离 · 实时多频道音乐调度
+    </p>
+  </div>
+</footer>
+
+<!-- ══════════════════════════════════════════════
+     Scripts
+     ══════════════════════════════════════════════ -->
+<script>
+// ── Translations ──
+const translations = {
+  zh: {
+    pageTitle: 'SoundNet — 频道音乐播放系统',
+    navFeatures: '功能特性',
+    navArch: '系统架构',
+    navScreenshots: '截图演示',
+    badge: 'v2.0 · 实时频道音乐系统',
+    heroTitle2: '控制与播放分离的',
+    heroTitle3: '分布式音乐系统',
+    heroDesc: '基于 Go + Vue 3 + WebSocket 构建，控制页面与播放器完全解耦。多频道实时调度，支持 Web / Android / Windows / Linux 全平台播放。',
+    ctaFeatures: '了解功能',
+    ctaArch: '架构一览',
+    featuresTitle: '核心功能',
+    featuresSub: '从频道管理到闹钟定时，打造全能的分布式音乐控制体验。',
+    f1Title: '控制播放分离',
+    f1Desc: '控制页面与播放器完全解耦，通过 Go 后端 WebSocket 调度。一个控制页面可同时指挥多个播放器。',
+    f2Title: '频道管理体系',
+    f2Desc: '频道是播放器逻辑集合。创建频道、分配播放器、独立队列。同一频道内的所有播放器同步接收指令。',
+    f3Title: '智能播放队列',
+    f3Desc: 'Redis 持久化队列，支持添加、删除、拖拽排序、清空。实时推送队列变更到控制端和播放器。',
+    f4Title: '全网音乐搜索',
+    f4Desc: '接入第三方音乐服务 API，搜索歌曲、歌单，获取播放链接和歌词。预留接口适配层，可切换数据源。',
+    f5Title: '闹钟 & 睡眠定时',
+    f5Desc: '频道级闹钟系统：渐入渐出、冲突策略、指定歌曲播放。睡眠定时自动暂停/停止，闭环体验。',
+    f6Title: '精细播放控制',
+    f6Desc: '播放/暂停、上一曲/下一曲、进度拖拽、音量调节（统一或单独）。实时状态同步，所见即所得。',
+    archTitle: '系统架构',
+    archSub: '全栈 Go + Vue 3 + Redis + SQLite，Docker Compose 一键拉起。',
+    archStep1: 'Vue 控制页面',
+    archStep2: 'Go API 平台',
+    archStep3: '播放器客户端',
+    archTech1Title: 'Go',
+    archTech1Desc: 'HTTP + WebSocket 服务<br/>业务核心 · 指令调度',
+    archTech2Title: 'Vue 3',
+    archTech2Desc: '响应式控制页面<br/>TypeScript · Vite 构建',
+    archTech3Title: 'Redis + SQLite',
+    archTech3Desc: '播放队列（Redis）<br/>播放器信息（SQLite）',
+    archTech4Title: 'Docker Compose',
+    archTech4Desc: 'api / redis / vue<br/>三服务一键部署',
+    lightweight: '轻量持久化',
+    devAndProd: '开发 & 生产',
+    thirdParty: '第三方 API',
+    wsLabel: '⚡ 所有通信基于 WebSocket · 实时双向',
+    screenshotsTitle: '界面预览',
+    screenshotsSub: '多端一致体验，从频道管理到播放控制一应俱全。',
+    screenshot1Cap: '📋 频道列表与播放器总览',
+    screenshot2Cap: '🎵 频道内播放队列与控制',
+    screenshot3Cap: '🔍 全网音乐搜索（支持多源）',
+    screenshot4Cap: '⏰ 闹钟 & 睡眠定时管理',
+    screenshot5Cap: '📱 多播放器跨设备切换',
+    screenshot6Cap: '🖥️ 桌面端宽屏频道界面',
+    footerBrand: 'SoundNet',
+    footerDesc: '基于 Go + Vue 3 + WebSocket 的分布式频道音乐播放系统',
+    footerTech: '技术栈：Go · Gorilla WebSocket · Vue 3 · TypeScript · Redis · SQLite · Docker · Vite',
+    footerCopyright: '© 2026 SoundNet Project · 控制与播放分离 · 实时多频道音乐调度',
+  },
+  en: {
+    pageTitle: 'SoundNet — Channel Music Player System',
+    navFeatures: 'Features',
+    navArch: 'Architecture',
+    navScreenshots: 'Gallery',
+    badge: 'v2.0 · Real-time Channel Music System',
+    heroTitle2: 'Distributed Music System with',
+    heroTitle3: 'Separate Control &amp; Playback',
+    heroDesc: 'Built with Go + Vue 3 + WebSocket, the control panel and players are fully decoupled. Multi-channel real-time scheduling supports Web / Android / Windows / Linux.',
+    ctaFeatures: 'Explore Features',
+    ctaArch: 'View Architecture',
+    featuresTitle: 'Core Features',
+    featuresSub: 'From channel management to alarm timers, a full-featured distributed music control experience.',
+    f1Title: 'Separate Control &amp; Playback',
+    f1Desc: 'The control panel and players are fully decoupled through Go backend WebSocket dispatching. One control panel can command multiple players simultaneously.',
+    f2Title: 'Channel Management',
+    f2Desc: 'Channels are logical groups of players. Create channels, assign players, independent queues. All players in the same channel receive commands synchronously.',
+    f3Title: 'Smart Play Queue',
+    f3Desc: 'Redis-persistent queue with add, delete, drag-to-reorder, and clear support. Real-time queue sync to both control panels and players.',
+    f4Title: 'Universal Music Search',
+    f4Desc: 'Integrated with third-party music service APIs for searching songs, playlists, and retrieving playback URLs and lyrics. Pluggable data source adapters.',
+    f5Title: 'Alarm &amp; Sleep Timer',
+    f5Desc: 'Channel-level alarm system: fade-in/out, conflict resolution, custom song playback. Sleep timer auto-pauses/stops for a complete experience.',
+    f6Title: 'Precise Playback Control',
+    f6Desc: 'Play/pause, previous/next, seek, volume control (global or individual). Real-time status sync — what you see is what you get.',
+    archTitle: 'System Architecture',
+    archSub: 'Full-stack Go + Vue 3 + Redis + SQLite. One-click deploy with Docker Compose.',
+    archStep1: 'Vue Control Panel',
+    archStep2: 'Go API Server',
+    archStep3: 'Player Client',
+    archTech1Title: 'Go',
+    archTech1Desc: 'HTTP + WebSocket server<br/>Business logic · Command dispatch',
+    archTech2Title: 'Vue 3',
+    archTech2Desc: 'Responsive control panel<br/>TypeScript · Vite build',
+    archTech3Title: 'Redis + SQLite',
+    archTech3Desc: 'Play queue (Redis)<br/>Player info (SQLite)',
+    archTech4Title: 'Docker Compose',
+    archTech4Desc: 'api / redis / vue<br/>One-click deploy',
+    lightweight: 'Lightweight Persistence',
+    devAndProd: 'Dev &amp; Production',
+    thirdParty: 'Third-party API',
+    wsLabel: '⚡ All communications over WebSocket · Real-time bidirectional',
+    screenshotsTitle: 'Screenshots',
+    screenshotsSub: 'Consistent experience across devices — from channel management to playback control.',
+    screenshot1Cap: '📋 Channel List & Player Overview',
+    screenshot2Cap: '🎵 Play Queue & Control',
+    screenshot3Cap: '🔍 Universal Music Search',
+    screenshot4Cap: '⏰ Alarm & Sleep Timer',
+    screenshot5Cap: '📱 Multi-Device Switching',
+    screenshot6Cap: '🖥️ Desktop Wide View',
+    footerBrand: 'SoundNet',
+    footerDesc: 'Distributed channel music player system built with Go + Vue 3 + WebSocket',
+    footerTech: 'Tech Stack: Go · Gorilla WebSocket · Vue 3 · TypeScript · Redis · SQLite · Docker · Vite',
+    footerCopyright: '© 2026 SoundNet Project · Separate Control &amp; Playback · Real-time Multi-channel Music Scheduling',
+  }
+};
+
+// ── Current language ──
+let currentLang = localStorage.getItem('soundnet-lang') || 'zh';
+
+// ── Apply translations ──
+function applyLanguage(lang) {
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.dataset.i18n;
+    if (translations[lang][key] !== undefined) {
+      el.innerHTML = translations[lang][key];
+    }
+  });
+  document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
+  document.getElementById('langToggle').textContent = lang === 'zh' ? 'EN' : '中文';
+  currentLang = lang;
+  localStorage.setItem('soundnet-lang', lang);
+}
+
+// ── Language toggle ──
+document.getElementById('langToggle').addEventListener('click', () => {
+  applyLanguage(currentLang === 'zh' ? 'en' : 'zh');
+});
+
+// ── Apply stored language on load ──
+applyLanguage(currentLang);
+
+// ── Mobile nav toggle ──
+document.getElementById('navToggle').addEventListener('click', () => {
+  document.getElementById('navLinks').classList.toggle('open');
+});
+
+// ── Close nav on link click (mobile) ──
+document.querySelectorAll('.nav-links a').forEach(link => {
+  link.addEventListener('click', () => {
+    document.getElementById('navLinks').classList.remove('open');
+  });
+});
+
+// ── Scrollspy: highlight active nav link ──
+const sections = document.querySelectorAll('section[id]');
+const navAnchors = document.querySelectorAll('.nav-links a[href^="#"]');
+function updateActiveNav() {
+  let current = '';
+  sections.forEach(section => {
+    const top = section.offsetTop - 100;
+    if (window.scrollY >= top) current = section.id;
+  });
+  navAnchors.forEach(a => {
+    a.style.color = a.getAttribute('href') === '#' + current ? 'var(--green-600)' : '';
+    a.style.fontWeight = a.getAttribute('href') === '#' + current ? '600' : '';
+  });
+}
+window.addEventListener('scroll', updateActiveNav);
+window.addEventListener('load', updateActiveNav);
+</script>
+</body>
+</html>

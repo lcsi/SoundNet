@@ -1,0 +1,20 @@
+/* ══════════════════════════════════════════════
+   Card Component
+   ══════════════════════════════════════════════ */
+
+.card {
+  background: var(--bg-secondary);
+  border-radius: var(--radius);
+  padding: var(--space-5, 16px);
+  border: 1px solid var(--border);
+}
+
+.card-title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}

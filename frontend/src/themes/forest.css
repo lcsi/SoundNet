@@ -1,0 +1,15 @@
+/* ===== Green Forest Theme ===== */
+.theme-forest {
+  --bg-primary: #1a2e1a;
+  --bg-secondary: #1e3a1e;
+  --bg-card: #2d4a2d;
+  --text-primary: #e8f0e8;
+  --text-secondary: #a0b0a0;
+  --accent: #4caf50;
+  --accent-hover: #66bb6a;
+  --success: #81c784;
+  --warning: #ffd54f;
+  --border: #3a5a3a;
+  --radius: 12px;
+  --radius-sm: 8px;
+}

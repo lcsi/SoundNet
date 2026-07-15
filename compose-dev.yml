@@ -1,0 +1,127 @@
+name: smart-ai-200026
+services:
+  api:
+    image: cosmtrek/air
+    working_dir: /app
+    volumes:
+      - ./api:/app
+      - sqlite_data:/data
+      - go-mod-cache:/go
+    environment:
+      - REDIS_ADDR=redis:6379
+      - PORT=8080
+      - SQLITE_PATH=/data/players.db
+    entrypoint: ["sh", "-c", "go mod tidy && air"]
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+  vue:
+    image: node:24-alpine
+    working_dir: /app
+    ports:
+      - "45070:5173"
+    volumes:
+      - ./frontend:/app
+      - dir1:/app/src/dir1
+      - node_modules:/app/node_modules
+    entrypoint: ["sh", "-c", "yarn install && yarn dev"]
+
+  web-build:
+    image: node:24-alpine
+    working_dir: /app
+    volumes:
+      - ./frontend:/app
+      - node_modules:/app/node_modules
+      - dist:/app/dist
+    entrypoint: ["sh", "-c", "yarn install && yarn build"]
+    
+  web-prod:
+    image: nginx:alpine
+    volumes:
+      - ./frontend/nginx.conf:/etc/nginx/conf.d/default.conf
+      - dist:/usr/share/nginx/html
+    ports:
+      - "45071:80"
+
+  touch:
+    image: alpine:latest
+    volumes:
+      - dir1:/dir1
+    entrypoint: ["sh", "-c", "find /dir1 -type f | xargs -n 1 touch"]
+
+  build-android:
+    build:
+      context: ./clients/player
+      dockerfile: build/docker/android/Dockerfile
+    image: player-builder-android:latest
+    volumes:
+      - ./clients/player:/app
+      - ./clients/player/build/output/android:/output
+      - go-mod-cache-android:/go/pkg/mod
+    working_dir: /app
+    command: >
+      sh -c "
+        echo '=== Player Builder ===' &&
+        go mod tidy &&
+        echo 'Building android-player-arm64...' &&
+        go build -ldflags='-s -w' -o /output/android-player-arm64 cmd/player/main.go &&
+        echo '=== Build complete: /output/android-player-arm64 ===' &&
+        ls -l /output/android-player-arm64
+      "
+      
+  build-windows:
+    build:
+      context: ./clients/player
+      dockerfile: build/docker/windows/Dockerfile
+    image: player-builder-windows:latest
+    volumes:
+      - ./clients/player:/app
+      - ./clients/player/build/output/windows:/output
+      - go-mod-cache-windows:/go/pkg/mod
+    working_dir: /app
+    command: >
+      sh -c "
+        echo '=== Player Builder ===' &&
+        go mod tidy &&
+        echo 'Building windows-player-amd64...' &&
+        go build -ldflags='-s -w' -o /output/windows-player-amd64 cmd/player/main.go &&
+        echo '=== Build complete: /output/windows-player-amd64 ===' &&
+        ls -l /output/windows-player-amd64
+      "
+    
+  build-linux:
+    build:
+      context: ./clients/player
+      dockerfile: build/docker/linux/Dockerfile
+    image: player-builder-linux:latest
+    volumes:
+      - ./clients/player:/app
+      - ./clients/player/build/output/linux:/output
+      - go-mod-cache-linux:/go/pkg/mod
+    working_dir: /app
+    command: >
+      sh -c "
+        echo '=== Player Builder ===' &&
+        go mod tidy &&
+        echo 'Building linux-player-amd64...' &&
+        go build -ldflags='-s -w' -o /output/linux-player-amd64 cmd/player/main.go &&
+        echo '=== Build complete: /output/linux-player-amd64 ===' &&
+        ls -l /output/linux-player-amd64
+      "
+
+networks:
+  default:
+    enable_ipv6: false
+
+volumes:
+  sqlite_data:
+  go-mod-cache:
+  node_modules:
+  dist:
+  dir1:
+  go-mod-cache-android:
+  go-mod-cache-windows:
+  go-mod-cache-linux:

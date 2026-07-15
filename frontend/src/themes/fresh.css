@@ -1,0 +1,15 @@
+/* ===== Fresh Yellow-Green Theme (light) ===== */
+.theme-fresh {
+  --bg-primary: #f7f9f0;
+  --bg-secondary: #ffffff;
+  --bg-card: #eef4e0;
+  --text-primary: #2e3d1f;
+  --text-secondary: #6a7f55;
+  --accent: #7cb342;
+  --accent-hover: #8bc34a;
+  --success: #43a047;
+  --warning: #f9a825;
+  --border: #d4e0c0;
+  --radius: 12px;
+  --radius-sm: 8px;
+}
